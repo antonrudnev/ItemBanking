@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ItemBanking.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ItemBanking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ItemBanking.Controllers
 {
-    public class HomeController : Controller
+    public class ItemBankController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ItemBankContext _context;
+        private readonly ILogger<ItemBankController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ItemBankController(ItemBankContext context, ILogger<ItemBankController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var itemBanks = await _context.ItemBanks.ToListAsync();
+            return View(itemBanks);
         }
 
         public IActionResult Privacy()

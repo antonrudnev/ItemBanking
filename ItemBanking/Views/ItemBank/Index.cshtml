@@ -1,0 +1,14 @@
+﻿@model List<ItemBanking.Models.ItemBank>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">List of all Item Banks:</h1>
+    @foreach (var itemBank in Model)
+    {
+        <p>
+            @itemBank.Name
+        </p>
+    }
+</div>
