@@ -3,12 +3,22 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .btn-group-vertical > button,a{
+        margin-bottom:10px;
+        border-radius:5px !important;
+    }
+</style>
+
 <div class="text-center">
     <h1 class="display-4">List of all Item Banks:</h1>
-    @foreach (var itemBank in Model)
-    {
-        <p>
-            @itemBank.Name
-        </p>
-    }
+    <div class="btn-group-vertical">
+        @foreach (var itemBank in Model)
+        {
+            <a href="" class="btn btn-primary btn-block">
+                @itemBank.Name
+            </a>
+        }
+    </div>
 </div>
+
