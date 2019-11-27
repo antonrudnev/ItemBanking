@@ -1,0 +1,78 @@
+﻿@model ItemBank
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<style>
+    .caret span {
+        display: inline-block;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .caret span {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transition: .3s transform ease-in-out;
+    }
+
+    .caret.collapsed span {
+        transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+        transition: .3s transform ease-in-out;
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Items from @Model.Name:</h1>
+    <div class="my-4">
+        @if (Model.Categories?.Any() ?? false)
+        {
+            void RenderTreeLevel(ICollection<Category> categories, bool isRoot, int seed)
+            {
+                <div class="accordion list-group text-left ml-4" id="accordion_@seed">
+                    @foreach (var category in categories.Where(x => x.ParentCategory == null || !isRoot))
+                    {
+                        @if ((category.SubCategories?.Any() ?? false) || (category.Items?.Any() ?? false))
+                        {
+                            <div class="list-group-item list-group-item-action border-0 caret collapsed" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapse_@category.Id">
+                                <span class="mr-1">&#9660;</span>
+                                @category.Name
+                            </div>
+                            <div id="collapse_@category.Id" class="collapse" data-parent="#accordion_@seed">
+                                @if (category.SubCategories?.Any() ?? false)
+                                {
+                                    RenderTreeLevel(category.SubCategories, false, category.Id);
+                                }
+                                @if (category.Items?.Any() ?? false)
+                                {
+                                    <div class="list-group ml-4">
+                                        @foreach (var item in category.Items)
+                                        {
+                                        <div class="list-group-item list-group-item-action border-0 ml-4">
+                                                @item.Name
+                                            <span class="ml-4" style="color:red;">&#10033;</span>
+                                        </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                <div class="list-group-item list-group-item-action border-0">
+                    <span class="mr-1">&#9655;</span>
+                    @category.Name
+                </div>
+                        }
+                    }
+                </div>
+            }
+            RenderTreeLevel(Model.Categories, true, 0);
+        }
+        else
+        {
+            <h4>No items found.</h4>
+        }
+    </div>
+</div>
