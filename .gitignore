@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.idea
+/.vs
+/ItemBanking/bin/Debug/netcoreapp3.0
+/ItemBanking/obj
+/ItemBanking/item_banking.db-wal
+/ItemBanking/item_banking.db-shm
