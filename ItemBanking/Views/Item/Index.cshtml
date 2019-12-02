@@ -23,56 +23,101 @@
     }
 </style>
 
-<div class="text-center">
-    <h1 class="display-4">Items from @Model.Name:</h1>
-    <div class="my-4">
-        @if (Model.Categories?.Any() ?? false)
-        {
-            void RenderTreeLevel(ICollection<Category> categories, bool isRoot, int seed)
-            {
-                <div class="accordion list-group text-left ml-4" id="accordion_@seed">
-                    @foreach (var category in categories.Where(x => x.ParentCategory == null || !isRoot))
+<div class="container text-center">
+    <h1 class="display-4 my-4">Items from @Model.Name:</h1>
+    @if (Model.Categories?.Any() ?? false)
+    {
+        <div class="row">
+            <div class="col-4">
+                @{void RenderTreeLevel(ICollection<Category> categories, bool isRoot, int seed)
                     {
-                        @if ((category.SubCategories?.Any() ?? false) || (category.Items?.Any() ?? false))
-                        {
-                            <div class="list-group-item list-group-item-action border-0 rounded-lg caret collapsed" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapse_@category.Id">
-                                <span class="mr-1">&#9660;</span>
-                                @category.Name
-                            </div>
-                            <div id="collapse_@category.Id" class="collapse" data-parent="#accordion_@seed">
-                                @if (category.SubCategories?.Any() ?? false)
+                        <div class="accordion text-left list-group ml-4" id="accordion_@seed">
+                            @foreach (var category in categories.Where(x => x.ParentCategory == null || !isRoot))
+                            {
+                                @if ((category.SubCategories?.Any() ?? false) || (category.Items?.Any() ?? false))
                                 {
-                                    RenderTreeLevel(category.SubCategories, false, category.Id);
-                                }
-                                @if (category.Items?.Any() ?? false)
-                                {
-                                    <div class="list-group ml-4">
-                                        @foreach (var item in category.Items)
+                                    <div class="list-group-item list-group-item-action border-0 rounded-lg caret collapsed" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapse_@category.Id">
+                                        <span class="mr-1">&#9660;</span>
+                                        @category.Name
+                                    </div>
+                                    <div id="collapse_@category.Id" class="collapse" data-parent="#accordion_@seed">
+                                        @if (category.SubCategories?.Any() ?? false)
                                         {
-                                        <div class="list-group-item list-group-item-action rounded-lg border-0 ml-4">
-                                                @item.Name
-                                            <span class="ml-4" style="color:red;">&#10033;</span>
-                                        </div>
+                                            RenderTreeLevel(category.SubCategories, false, category.Id);
+                                        }
+                                        @if (category.Items?.Any() ?? false)
+                                        {
+                                            <div class="list-group ml-4" id="list-tab_@category.Id" role="tablist">
+                                                @foreach (var item in category.Items)
+                                                {
+                                                    <a class="list-group-item list-group-item-action rounded-lg border-0 ml-4" id="list-item_@item.Id-list" data-toggle="list" href="#list-item_@item.Id" role="tab" aria-controls="item_@item.Id">
+                                                        @item.Name
+                                                        <span class="ml-4" style="color:red;">&#10033;</span>
+                                                    </a>
+                                                }
+                                            </div>
                                         }
                                     </div>
                                 }
-                            </div>
-                        }
-                        else
+                                else
+                                {
+                                    <div class="list-group-item list-group-item-action rounded-lg border-0">
+                                        <span class="mr-1">&#9655;</span>
+                                        @category.Name
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    RenderTreeLevel(Model.Categories, true, 0);
+                }
+            </div>
+            <div class="col-1">
+            </div>
+            <div class="col-7">
+                <div class="tab-content" id="nav-tabContent">
+                    @foreach (var category in Model.Categories)
+                    {
+                        foreach (var item in category.Items)
                         {
-                <div class="list-group-item list-group-item-action rounded-lg border-0">
-                    <span class="mr-1">&#9655;</span>
-                    @category.Name
-                </div>
+                            <div class="card text-left tab-pane fade" id="list-item_@item.Id" role="tabpanel" aria-labelledby="list-item_@item.Id-list">
+                                <div class="card-header">
+                                    @{
+                                        var current = category;
+                                        var path = "";
+                                        while (current != null)
+                                        {
+                                            path = "/" + @current.Name + path;
+                                            current = current.ParentCategory;
+                                        }
+                                        @path
+                                    }
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Name</h5>
+                                    <p class="card-text">@item.Content</p>
+                                    <a href="#" class="btn btn-secondary">Modify</a>
+                                </div>
+                                <div class="card-footer text-muted">Generated content</div>
+                            </div>
                         }
                     }
                 </div>
-            }
-            RenderTreeLevel(Model.Categories, true, 0);
-        }
-        else
-        {
-            <h4>No items found.</h4>
-        }
-    </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h4>No items found.</h4>
+    }
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(".list-group-item").on('click', function () {
+            $(".list-group-item").each(function (index) {
+                $(this).removeClass("active");
+            });
+        })
+    </script>
+}

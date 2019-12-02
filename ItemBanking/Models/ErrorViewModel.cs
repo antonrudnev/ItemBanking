@@ -1,5 +1,3 @@
-using System;
-
 namespace ItemBanking.Models
 {
     public class ErrorViewModel

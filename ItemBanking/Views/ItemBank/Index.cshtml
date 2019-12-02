@@ -4,8 +4,8 @@
 }
 
 <div class="container text-center">
-    <h1 class="display-4">List of all Item Banks:</h1>
-    <div class="row list-group mt-4">
+    <h1 class="display-4 my-4">List of all item banks:</h1>
+    <div class="row list-group">
         @foreach (var itemBank in Model)
         {
             <a href="@Url.Action("Index", "Item", new {id=itemBank.Id})" class="list-group-item list-group-item-action rounded-lg my-1">@itemBank.Name (@itemBank.Language)</a>
