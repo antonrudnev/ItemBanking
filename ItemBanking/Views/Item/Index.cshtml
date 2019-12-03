@@ -50,7 +50,7 @@
                                             <div class="list-group ml-4" id="list-tab_@category.Id" role="tablist">
                                                 @foreach (var item in category.Items)
                                                 {
-                                                    <a class="list-group-item list-group-item-action rounded-lg border-0 ml-4" id="list-item_@item.Id-list" data-toggle="list" href="#list-item_@item.Id" role="tab" aria-controls="item_@item.Id">
+                                                    <a class="list-group-item list-group-item-action bank-item rounded-lg border-0 ml-4" id="list-item_@item.Id-list" data-toggle="list" href="#list-item_@item.Id" role="tab" aria-controls="item_@item.Id">
                                                         @item.Name
                                                         <span class="ml-4" style="color:red;">&#10033;</span>
                                                     </a>
@@ -90,7 +90,7 @@
                                             path = "/" + @current.Name + path;
                                             current = current.ParentCategory;
                                         }
-                                        @path
+                                        <strong>@path</strong>
                                     }
                                 </div>
                                 <div class="card-body">
@@ -114,8 +114,8 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(".list-group-item").on('click', function () {
-            $(".list-group-item").each(function (index) {
+        $(".bank-item").on('click', function () {
+            $(".bank-item").each(function () {
                 $(this).removeClass("active");
             });
         })
