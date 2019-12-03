@@ -21,7 +21,7 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var itemBanks = await _context.ItemBanks.ToListAsync();
+            var itemBanks = await _context.ItemBanks.Include("Language").ToListAsync();
             return View(itemBanks);
         }
 

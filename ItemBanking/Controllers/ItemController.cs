@@ -20,7 +20,7 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index(int id)
         {
-            var itemBank = await _context.ItemBanks.Where(x => x.Id == id).Include("Categories.Items").SingleAsync();
+            var itemBank = await _context.ItemBanks.Where(x => x.Id == id).Include("Language").Include("Categories.Items").SingleAsync();
             return View(itemBank);
         }
     }
