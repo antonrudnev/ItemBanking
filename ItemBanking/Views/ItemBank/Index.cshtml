@@ -8,7 +8,7 @@
     <div class="row list-group">
         @foreach (var itemBank in Model)
         {
-            <a href="@Url.Action("Index", "Item", new {id=itemBank.Id})" class="list-group-item list-group-item-action rounded-lg my-1">@itemBank.Name (@itemBank.Language.Code)</a>
+            <a class="list-group-item list-group-item-action rounded-lg my-1" href="@Url.Action("Index", "Item", new {id=itemBank.Id})"><span dir="@(itemBank.Language.IsRightToLeft?"rtl":"ltr")">@itemBank.Name</span> (@itemBank.Language.Code)</a>
         }
     </div>
 </div>

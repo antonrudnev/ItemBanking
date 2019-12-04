@@ -24,7 +24,7 @@
 </style>
 
 <div class="container text-center">
-    <h1 class="display-4 my-4">Items from @Model.Name:</h1>
+    <h1 class="display-4 my-4">Items from <span dir="@(Model.Language.IsRightToLeft?"rtl":"ltr")">@Model.Name</span>:</h1>
     @if (Model.Categories?.Any() ?? false)
     {
         <div class="row">
@@ -74,13 +74,13 @@
             </div>
             <div class="col-1">
             </div>
-            <div class="col-7">
+            <div class="col-7 @(Model.Language.IsRightToLeft?"text-right":"text-left")" dir="@(Model.Language.IsRightToLeft?"rtl":"ltr")">
                 <div class="tab-content" id="nav-tabContent">
                     @foreach (var category in Model.Categories)
                     {
                         foreach (var item in category.Items)
                         {
-                            <div class="card text-left tab-pane fade" id="list-item_@item.Id" role="tabpanel" aria-labelledby="list-item_@item.Id-list">
+                            <div class="card tab-pane fade" id="list-item_@item.Id" role="tabpanel" aria-labelledby="list-item_@item.Id-list">
                                 <div class="card-header">
                                     @{
                                         var current = category;
@@ -98,7 +98,7 @@
                                     <p class="card-text">@item.Content</p>
                                     <a href="#" class="btn btn-secondary">Modify</a>
                                 </div>
-                                <div class="card-footer text-muted">Generated content for @item.Category.ItemBank.Language.Name language</div>
+                                <div class="card-footer text-muted">Generated content for @category.ItemBank.Language.Name language</div>
                             </div>
                         }
                     }
