@@ -24,7 +24,7 @@
 </style>
 
 <div class="container text-center">
-    <h1 class="display-4 my-4">Items from <span dir="@(Model.Language.IsRightToLeft?"rtl":"ltr")">@Model.Name</span>:</h1>
+    <h1 class="display-4 my-4">Items for <span dir="@(Model.Language.IsRightToLeft?"rtl":"ltr")">@Model.Name</span>:</h1>
     @if (Model.Categories?.Any() ?? false)
     {
         <div class="row">
@@ -96,7 +96,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">@item.Name</h5>
                                     <p class="card-text">@item.Content</p>
-                                    <a href="#" class="btn btn-secondary">Modify</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Modify</a>
                                 </div>
                                 <div class="card-footer text-muted">Generated content for @category.ItemBank.Language.Name language</div>
                             </div>
@@ -120,4 +120,5 @@
             });
         })
     </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
