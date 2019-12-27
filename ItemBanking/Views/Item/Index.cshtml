@@ -71,6 +71,10 @@
                     }
                     RenderTreeLevel(Model.Categories, true, 0);
                 }
+                <div class="text-left ml-4 mt-4">
+                    <a asp-controller="ItemBank" asp-action="Export" asp-route-id="@Model.Id" class="btn btn-secondary">Export <span>&#8681;</span></a>
+                    <a class="btn btn-secondary ml-1" href="">Import <span>&#8679;</span></a>
+                </div>
             </div>
             <div class="col-1">
             </div>

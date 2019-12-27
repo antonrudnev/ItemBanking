@@ -21,7 +21,7 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index(int? id)
         {
-            _logger.LogInformation("Executed endpoint 'ItemController.Index'");
+            _logger.LogInformation($"Executed endpoint '/Item/Index/{id}'");
             if (id == null)
             {
                 return NotFound();
@@ -31,18 +31,17 @@ namespace ItemBanking.Controllers
             {
                 return NotFound();
             }
-            _logger.LogInformation($"Item bank content in '{itemBank.Language.Name}'");
+            _logger.LogInformation($"Displayed item bank content in '{itemBank.Language.Name}'");
             return View(itemBank);
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            _logger.LogInformation("Executed endpoint 'ItemBankController.Edit (GET)'");
+            _logger.LogInformation($"Executed endpoint '/Item/Edit/{id} (GET)'");
             if (id == null)
             {
                 return NotFound();
             }
-
             var item = await _context.Items.Include("Category.ItemBank.Language").SingleOrDefaultAsync(x => x.Id == id);
             if (item == null)
             {
@@ -56,7 +55,7 @@ namespace ItemBanking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content")]Item item)
         {
-            _logger.LogInformation("Executed endpoint 'ItemBankController.Edit (POST)'");
+            _logger.LogInformation($"Executed endpoint '/Item/Edit/{id} (POST)'");
             if (id != item.Id)
             {
                 return NotFound();
@@ -66,7 +65,6 @@ namespace ItemBanking.Controllers
                 _context.Update(item);
                 await _context.SaveChangesAsync();
                 int categoryId = await _context.Items.Where(x => x.Id == id).Select(x => x.Category.ItemBank.Id).SingleOrDefaultAsync();
-                _logger.LogInformation($"Edit (POST) item details");
                 return RedirectToAction(nameof(Index), new { id = categoryId });
             }
             return View(item);

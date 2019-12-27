@@ -1,9 +1,12 @@
-﻿using ItemBanking.Data;
+﻿using CsvHelper;
+using ItemBanking.Data;
 using ItemBanking.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ItemBanking.Controllers
@@ -21,14 +24,33 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Executed endpoint 'ItemBankController.Index'");
+            _logger.LogInformation("Executed endpoint '/ItemBank/Index'");
             var itemBanks = await _context.ItemBanks.Include("Language").ToListAsync();
             return View(itemBanks);
         }
 
+        public async Task<IActionResult> Export(int id)
+        {
+            _logger.LogInformation($"Executed endpoint '/ItemBank/Export/{id}'");
+            var items = await _context.Categories.Where(x => x.ItemBank.Id == id).SelectMany(x => x.Items, (c, i) => 
+                new { CategoryId = c.Id, CategoryName = c.Name, ItemId = i.Id, ItemName = i.Name, Content = i.Content }).ToListAsync();
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new StreamWriter(stream))
+                {
+                    using (var csv = new CsvWriter(writer))
+                    {
+                        csv.WriteRecords(items);
+                        writer.Flush();
+                    }
+                }
+                return File(stream.ToArray(), "text/csv", "Reports.csv");
+            }
+        }
+
         public IActionResult Privacy()
         {
-            _logger.LogInformation("Executed endpoint 'ItemBankController.Privacy'");
+            _logger.LogInformation("Executed endpoint '/ItemBank/Privacy'");
             return View();
         }
 
