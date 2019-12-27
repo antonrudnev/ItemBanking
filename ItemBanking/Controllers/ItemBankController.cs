@@ -21,12 +21,14 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Executed endpoint 'ItemBankController.Index'");
             var itemBanks = await _context.ItemBanks.Include("Language").ToListAsync();
             return View(itemBanks);
         }
 
         public IActionResult Privacy()
         {
+            _logger.LogInformation("Executed endpoint 'ItemBankController.Privacy'");
             return View();
         }
 
