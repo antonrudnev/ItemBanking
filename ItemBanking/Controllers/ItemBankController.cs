@@ -45,7 +45,6 @@ namespace ItemBanking.Controllers
 
             var items = table.Select(x => new
             {
-                x.ItemBank,
                 x.CategoryId,
                 x.CategoryName,
                 x.ItemId,
