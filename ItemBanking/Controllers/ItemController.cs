@@ -21,7 +21,8 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index(int? id)
         {
-            _logger.LogInformation($"Executed endpoint '/Item/Index/{id}'");
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
+            _logger.LogInformation($"Executed endpoint '/Item/Index/{id}' from {ip}");
             if (id == null)
             {
                 return NotFound();
@@ -31,13 +32,14 @@ namespace ItemBanking.Controllers
             {
                 return NotFound();
             }
-            _logger.LogInformation($"Displayed item bank content in '{itemBank.Language.Name}'");
+            _logger.LogInformation($"Displayed item bank {id} content in '{itemBank.Language.Name}'");
             return View(itemBank);
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            _logger.LogInformation($"Executed endpoint '/Item/Edit/{id} (GET)'");
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
+            _logger.LogInformation($"Executed endpoint GET '/Item/Edit/{id}' from {ip}");
             if (id == null)
             {
                 return NotFound();
@@ -47,7 +49,7 @@ namespace ItemBanking.Controllers
             {
                 return NotFound();
             }
-            _logger.LogInformation($"Edit (GET) item details in '{item.Category.ItemBank.Language.Name}'");
+            _logger.LogInformation($"View item {id} details in '{item.Category.ItemBank.Language.Name}'");
             return View(item);
         }
 
@@ -55,7 +57,8 @@ namespace ItemBanking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content")]Item item)
         {
-            _logger.LogInformation($"Executed endpoint '/Item/Edit/{id} (POST)'");
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
+            _logger.LogInformation($"Executed endpoint POST '/Item/Edit/{id}' from {id}");
             if (id != item.Id)
             {
                 return NotFound();
@@ -65,6 +68,7 @@ namespace ItemBanking.Controllers
                 _context.Update(item);
                 await _context.SaveChangesAsync();
                 int? categoryId = await _context.Items.Where(x => x.Id == id).Select(x => x.Category.ItemBank.Id).SingleOrDefaultAsync();
+                _logger.LogInformation($"Saved item {id} details");
                 return RedirectToAction(nameof(Index), new { id = categoryId });
             }
             return View(item);

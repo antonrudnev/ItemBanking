@@ -32,7 +32,8 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Export(int id)
         {
-            _logger.LogInformation($"Executed endpoint '/ItemBank/Export/{id}'");
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
+            _logger.LogInformation($"Executed endpoint '/ItemBank/Export/{id}' from {ip}");
             var table = await _context.Categories.Where(x => x.ItemBank.Id == id).SelectMany(x => x.Items.DefaultIfEmpty(), (c, i) =>
                 new
                 {
@@ -71,7 +72,8 @@ namespace ItemBanking.Controllers
 
         public IActionResult Privacy()
         {
-            _logger.LogInformation("Executed endpoint '/ItemBank/Privacy'");
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
+            _logger.LogInformation($"Executed endpoint '/ItemBank/Privacy' from {ip}");
             return View();
         }
 
