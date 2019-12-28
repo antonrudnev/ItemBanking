@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ItemBanking.Data
 {
-    public class ItemBankContext : DbContext
+    public class ItemBankDbContext : DbContext
     {
-        public ItemBankContext(DbContextOptions<ItemBankContext> options) : base(options)
+        public ItemBankDbContext(DbContextOptions<ItemBankDbContext> options) : base(options)
         {
 
         }

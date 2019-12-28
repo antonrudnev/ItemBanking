@@ -13,10 +13,10 @@ namespace ItemBanking.Controllers
 {
     public class ItemBankController : Controller
     {
-        private readonly ItemBankContext _context;
+        private readonly ItemBankDbContext _context;
         private readonly ILogger<ItemBankController> _logger;
 
-        public ItemBankController(ItemBankContext context, ILogger<ItemBankController> logger)
+        public ItemBankController(ItemBankDbContext context, ILogger<ItemBankController> logger)
         {
             _context = context;
             _logger = logger;
@@ -24,7 +24,8 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Executed endpoint '/ItemBank/Index'");
+            var ip = Request.HttpContext.Connection.RemoteIpAddress;
+            _logger.LogInformation($"Executed endpoint '/ItemBank/Index' from {ip}");
             var itemBanks = await _context.ItemBanks.Include("Language").ToListAsync();
             return View(itemBanks);
         }

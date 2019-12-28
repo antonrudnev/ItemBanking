@@ -23,7 +23,7 @@ namespace ItemBanking
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<ItemBankContext>();
+                    var context = services.GetRequiredService<ItemBankDbContext>();
                     context.Database.EnsureCreated();
                 }
                 catch (Exception ex)

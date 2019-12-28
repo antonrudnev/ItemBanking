@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ItemBanking.Migrations
 {
-    [DbContext(typeof(ItemBankContext))]
+    [DbContext(typeof(ItemBankDbContext))]
     [Migration("20191121214520_InitialCreate")]
     partial class InitialCreate
     {

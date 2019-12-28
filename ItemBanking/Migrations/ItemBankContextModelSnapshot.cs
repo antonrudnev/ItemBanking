@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ItemBanking.Migrations
 {
-    [DbContext(typeof(ItemBankContext))]
+    [DbContext(typeof(ItemBankDbContext))]
     partial class ItemBankContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

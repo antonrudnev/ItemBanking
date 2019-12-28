@@ -10,10 +10,10 @@ namespace ItemBanking.Controllers
 {
     public class ItemController : Controller
     {
-        private readonly ItemBankContext _context;
+        private readonly ItemBankDbContext _context;
         private readonly ILogger<ItemController> _logger;
 
-        public ItemController(ItemBankContext context, ILogger<ItemController> logger)
+        public ItemController(ItemBankDbContext context, ILogger<ItemController> logger)
         {
             _context = context;
             _logger = logger;
