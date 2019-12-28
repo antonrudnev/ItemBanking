@@ -4,7 +4,7 @@ namespace ItemBanking.Models
 {
     public class Category
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public ItemBank ItemBank { get; set; }
         public Category ParentCategory { get; set; }

@@ -64,7 +64,7 @@ namespace ItemBanking.Controllers
             {
                 _context.Update(item);
                 await _context.SaveChangesAsync();
-                int categoryId = await _context.Items.Where(x => x.Id == id).Select(x => x.Category.ItemBank.Id).SingleOrDefaultAsync();
+                int? categoryId = await _context.Items.Where(x => x.Id == id).Select(x => x.Category.ItemBank.Id).SingleOrDefaultAsync();
                 return RedirectToAction(nameof(Index), new { id = categoryId });
             }
             return View(item);

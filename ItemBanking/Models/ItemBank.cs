@@ -4,7 +4,7 @@ namespace ItemBanking.Models
 {
     public class ItemBank
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public Language Language { get; set; }
 

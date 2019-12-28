@@ -32,8 +32,29 @@ namespace ItemBanking.Controllers
         public async Task<IActionResult> Export(int id)
         {
             _logger.LogInformation($"Executed endpoint '/ItemBank/Export/{id}'");
-            var items = await _context.Categories.Where(x => x.ItemBank.Id == id).SelectMany(x => x.Items, (c, i) => 
-                new { CategoryId = c.Id, CategoryName = c.Name, ItemId = i.Id, ItemName = i.Name, Content = i.Content }).ToListAsync();
+            var table = await _context.Categories.Where(x => x.ItemBank.Id == id).SelectMany(x => x.Items.DefaultIfEmpty(), (c, i) =>
+                new
+                {
+                    ItemBank = c.ItemBank.Name,
+                    CategoryId = c.Id,
+                    CategoryName = c.Name,
+                    ItemId = i.Id,
+                    ItemName = i.Name,
+                    Content = i.Content
+                }).ToListAsync();
+
+            var items = table.Select(x => new
+            {
+                x.ItemBank,
+                x.CategoryId,
+                x.CategoryName,
+                x.ItemId,
+                x.ItemName,
+                x.Content
+            });
+
+            string itemBankName = table.Select(x => x.ItemBank).First();
+
             using (var stream = new MemoryStream())
             {
                 using (var writer = new StreamWriter(stream))
@@ -44,7 +65,7 @@ namespace ItemBanking.Controllers
                         writer.Flush();
                     }
                 }
-                return File(stream.ToArray(), "text/csv", "Reports.csv");
+                return File(stream.ToArray(), "text/csv", $"{itemBankName}.csv");
             }
         }
 
