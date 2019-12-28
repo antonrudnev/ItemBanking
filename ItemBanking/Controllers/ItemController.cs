@@ -68,7 +68,7 @@ namespace ItemBanking.Controllers
                 _context.Update(item);
                 await _context.SaveChangesAsync();
                 int? categoryId = await _context.Items.Where(x => x.Id == id).Select(x => x.Category.ItemBank.Id).SingleOrDefaultAsync();
-                _logger.LogInformation($"Saved item {id} details");
+                _logger.LogInformation($"Edit item {id} details");
                 return RedirectToAction(nameof(Index), new { id = categoryId });
             }
             return View(item);
