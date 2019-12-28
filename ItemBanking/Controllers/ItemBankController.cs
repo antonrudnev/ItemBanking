@@ -24,7 +24,7 @@ namespace ItemBanking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var ip = Request.HttpContext.Connection.RemoteIpAddress;
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
             _logger.LogInformation($"Executed endpoint '/ItemBank/Index' from {ip}");
             var itemBanks = await _context.ItemBanks.Include("Language").ToListAsync();
             return View(itemBanks);
