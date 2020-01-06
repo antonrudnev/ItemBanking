@@ -73,7 +73,10 @@
                 }
                 <div class="text-left ml-4 mt-4">
                     <a asp-controller="ItemBank" asp-action="Export" asp-route-id="@Model.Id" class="btn btn-secondary">Export <span>&#8681;</span></a>
-                    <a class="btn btn-secondary ml-1" href="">Import <span>&#8679;</span></a>
+                    <button onclick="$('#uploadFile').click()" class="btn btn-secondary ml-1">Import <span>&#8679;</span></button>
+                    <form asp-controller="ItemBank" asp-action="Import" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                        <input id="uploadFile" name="file" type="file" accept="text/csv" onchange="this.form.submit()" style="display:none">
+                    </form>
                 </div>
             </div>
             <div class="col-1">

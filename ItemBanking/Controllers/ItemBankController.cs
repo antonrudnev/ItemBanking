@@ -1,9 +1,11 @@
 ﻿using CsvHelper;
 using ItemBanking.Data;
 using ItemBanking.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -68,6 +70,44 @@ namespace ItemBanking.Controllers
                 }
                 return File(stream.ToArray(), "text/csv", $"{itemBankName}.csv");
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Import(int id, IFormFile file)
+        {
+            if (file != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    using (var reader = new StreamReader(file.OpenReadStream()))
+                    using (var csv = new CsvReader(reader))
+                    {
+                        var records = csv.GetRecords(new
+                        {
+                            CategoryId = default(int),
+                            CategoryName = string.Empty,
+                            ItemId = default(int?),
+                            ItemName = string.Empty,
+                            Content = string.Empty
+                        });
+                        var items = records.Where(x => x.ItemId != null).Select(x => new Item
+                        {
+                            Id = x.ItemId,
+                            Name = x.ItemName,
+                            Content = x.Content
+                        });
+                        foreach (var item in items)
+                        {
+                            _context.Attach(item);
+                            _context.Entry(item).Property(x => x.Name).IsModified = true;
+                            _context.Entry(item).Property(x => x.Content).IsModified = true;
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+            return RedirectToAction("Index", "Item", new { id });
         }
 
         public IActionResult Privacy()
